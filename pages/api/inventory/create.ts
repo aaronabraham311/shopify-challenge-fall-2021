@@ -1,30 +1,41 @@
-import prisma from '@prisma/client';
-import AWS from 'aws-sdk';
-import multer from 'multer';
-import multerS3 from 'multer-s3';
-
-// AWS config
-AWS.config.update({
-    accessKeyId: process.env.AWS_ACCESS_KEY,
-    secretAccessKey: process.env.AWS_SECRET_KEY, 
-    region: process.env.BUCKET_REGION,
-});
+import prisma from '../../../prisma/index'; // Prisma client
 
 export default async (req, res) => {
-    // Get information fields
-    const { filename, name, description, quantity, price } = req.body;
+    const {
+        filename,
+        name,
+        description,
+        quantity,
+        price,
+        tag
+    } = req.body;
 
-    // Upload picture to S3
-    const s3 = new AWS.S3();
+    try {
+        // Create inventory and picture assets
+        const inventory = await prisma.inventory.create({
+            data: {
+                pictureAsset: {
+                    create: { s3_key: filename },
+                },
+                name,
+                description,
+                quantity,
+                price,
+                tag,
+            }
+        });
 
-    console.log(req.query.file);
-
-    const post = await s3.createPresignedPost({
-        Bucket: process.env.BUCKET_NAME,
-        Fields: {
-            key: req.query.file,
-        },
-    })
-
-    res.status(200).json(post);
+        if(inventory) {
+            return res.status(200).json(inventory);
+        } else {
+            return res.status(400).json({
+                error: 'Error adding to inventory',
+            })
+        }
+    } catch (e) {
+        console.log(e);
+        return res.status(400).json({
+            error: 'Error adding to inventory',
+        });
+    }
 }

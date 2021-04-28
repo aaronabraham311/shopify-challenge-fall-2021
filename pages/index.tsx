@@ -2,6 +2,7 @@ import React from "react"
 import { GetStaticProps } from "next"
 import Layout from "../components/Layout"
 import Post, { PostProps } from "../components/Post"
+import axios from "axios"
 
 export const getStaticProps: GetStaticProps = async () => {
   const feed = [
@@ -27,24 +28,31 @@ const Blog: React.FC<Props> = (props) => {
   const uploadPhoto = async(e) => {
     const file = e.target.files[0];
     const filename = encodeURIComponent(file.name);
-    const res = await fetch(`/api/inventory/create?file=${filename}`);
-    const { url, fields } = await res.json();
+    
+    const response = await axios.post('/api/picture/presign', {
+      file: filename,
+    });
+    const { url, fields } = await response.data;
     const formData = new FormData();
 
-    Object.entries({ ...fields, file}).forEach(([key, value]) => {
+    Object.entries({...fields, file}).forEach(([key, value]) => {
       formData.append(key, value);
-    })
+    });
 
     const upload = await fetch(url, {
       method: 'POST',
-      body: formData
+      body: formData 
     });
 
-    if(upload.ok) {
-      console.log('Uploaded successfully');
-    } else {
-      console.log('Upload failed');
+    const body = {
+      filename: filename,
+      name: 'test',
+      description: 'test sample',
+      quantity: 0,
+      price: 0,
+      tag: 'test'
     }
+    const res = await axios.post('/api/inventory/create', body)
   }
   
   return (
