@@ -12,7 +12,8 @@ generator client {
 
 model PictureAsset {
   id                  Int                @id @default(autoincrement())
-  s3_key              String
+  s3_key              String             
+  s3_link             String             @default("")
   transactions        Transaction[]
   inventory           Inventory?
   @@map("pictures")

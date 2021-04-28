@@ -11,11 +11,15 @@ export default async (req, res) => {
     } = req.body;
 
     try {
+        const s3Link = process.env.BASE_S3_LINK + filename
         // Create inventory and picture assets
         const inventory = await prisma.inventory.create({
             data: {
                 pictureAsset: {
-                    create: { s3_key: filename },
+                    create: { 
+                        s3_key: filename,
+                        s3_link: s3Link,
+                    },
                 },
                 name,
                 description,
@@ -33,7 +37,6 @@ export default async (req, res) => {
             })
         }
     } catch (e) {
-        console.log(e);
         return res.status(400).json({
             error: 'Error adding to inventory',
         });
