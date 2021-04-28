@@ -12,7 +12,7 @@ generator client {
 
 model PictureAsset {
   id                  Int                @id @default(autoincrement())
-  s3_id               Int
+  s3_key              String
   transactions        Transaction[]
   inventory           Inventory?
   @@map("pictures")
@@ -36,7 +36,7 @@ model Inventory {
   name                String
   description         String
   quantity            Int
-  price               Float
+  price               Float              @default(0)
   tag                 String
   created_at          DateTime           @default(now()) @db.Timestamptz(6) 
   @@map("inventory")

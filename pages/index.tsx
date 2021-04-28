@@ -24,6 +24,29 @@ type Props = {
 }
 
 const Blog: React.FC<Props> = (props) => {
+  const uploadPhoto = async(e) => {
+    const file = e.target.files[0];
+    const filename = encodeURIComponent(file.name);
+    const res = await fetch(`/api/inventory/create?file=${filename}`);
+    const { url, fields } = await res.json();
+    const formData = new FormData();
+
+    Object.entries({ ...fields, file}).forEach(([key, value]) => {
+      formData.append(key, value);
+    })
+
+    const upload = await fetch(url, {
+      method: 'POST',
+      body: formData
+    });
+
+    if(upload.ok) {
+      console.log('Uploaded successfully');
+    } else {
+      console.log('Upload failed');
+    }
+  }
+  
   return (
     <Layout>
       <div className="page">
@@ -35,6 +58,7 @@ const Blog: React.FC<Props> = (props) => {
             </div>
           ))}
         </main>
+        <input onChange={uploadPhoto} type="file" accept="image/png, image/jpeg"/>
       </div>
       <style jsx>{`
         .post {
