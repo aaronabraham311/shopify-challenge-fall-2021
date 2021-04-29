@@ -12,6 +12,7 @@ const Grid: React.FC = ({ inventory }) => {
                 imageFilename={item.pictureAsset.s3_link}
                 imageTag={item.tag}
                 itemTitle={item.name}
+                inventoryItem={item}
             />
         }))}
     </SimpleGrid>

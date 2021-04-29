@@ -12,7 +12,7 @@ const NavBarContainer: React.FC = () => {
       bg="transparent"
       color="primary.700"
     >
-      <Text>Amethyst: A Shopify Dev Challenge</Text>
+      <Text fontSize="4xl">Amethyst: A Shopify Dev Challenge</Text>
       <Spacer />
       <Link display="block" alignContent="right">
         <Text>Log in</Text>
