@@ -7,7 +7,8 @@ const ImageCard: React.FC = ({
     imageFilename,
     imageTag,
     itemTitle,
-    inventoryItem
+    inventoryItem,
+    handleTransaction
 }) => {
     const [modalOpen, setModalOpen] = React.useState(false);
 
@@ -19,8 +20,14 @@ const ImageCard: React.FC = ({
         setModalOpen(false);
     }
 
-    const handleSubmit = () => {
+    const handleSubmit = (quantity) => {
         setModalOpen(false);
+        handleTransaction({
+            itemId: inventoryItem.id,
+            pictureAssetId: inventoryItem.pictureAsset.id,
+            quantity: parseInt(quantity),
+            price: inventoryItem.price,
+        });
     }
 
     return (

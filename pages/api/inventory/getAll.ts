@@ -11,7 +11,6 @@ export default async (req, res) => {
 
         return res.status(200).json(inventory);
     } catch (e) {
-        console.log(e);
         return res.status(400).json({
             error: 'Error getting all inventory',
         });

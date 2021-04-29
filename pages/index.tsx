@@ -52,12 +52,34 @@ const Blog: React.FC = (props) => {
     const res = await axios.post('/api/inventory/create', body)
   }
 
-  console.log(inventory);
+  const handleTransactionSubmit = async ({ 
+    itemId,
+    pictureAssetId,
+    quantity,
+    price
+  }) => {
+    const response = await axios.post('/api/transaction/buy', {
+      itemId,
+      pictureAssetId,
+      quantity,
+      price,
+    });
+
+    const replaceIndex = inventory.findIndex(
+      (item) => item.id === response.data.id
+    );
+    const copiedInventory = [...inventory];
+    copiedInventory[replaceIndex] = response.data;
+    setInventory(copiedInventory);
+  }
   
   return (
     <>
       <NavBarContainer />
-      <Grid inventory={inventory} />
+      <Grid 
+        inventory={inventory} 
+        handleTransaction={handleTransactionSubmit}
+      />
       <input onChange={uploadPhoto} type="file" accept="image/png, image/jpeg"/>
     </>
   )

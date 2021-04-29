@@ -3,7 +3,7 @@ import { SimpleGrid } from "@chakra-ui/react"
 
 import ImageCard from "./ImageCard";
 
-const Grid: React.FC = ({ inventory }) => {
+const Grid: React.FC = ({ inventory, handleTransaction }) => {
   return (
     <SimpleGrid minChildWidth="300px" spacing="40px" p="10">
         {inventory.length > 0 && (inventory.map((item) => {
@@ -13,6 +13,7 @@ const Grid: React.FC = ({ inventory }) => {
                 imageTag={item.tag}
                 itemTitle={item.name}
                 inventoryItem={item}
+                handleTransaction={handleTransaction}
             />
         }))}
     </SimpleGrid>

@@ -5,6 +5,7 @@ import {
     Image,
     Text,
     Button,
+    VStack,
     Modal,
     ModalOverlay,
     ModalContent,
@@ -27,7 +28,7 @@ const ImageModal: React.FC = ({
     modalTitle,
     inventoryItem
 }) => {
-    const { control, handleSubmit } = useForm({
+    const { control, handleSubmit, reset } = useForm({
         defaultValues: {
             quantity: 0,
         }
@@ -36,52 +37,59 @@ const ImageModal: React.FC = ({
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
-            <ModalContent>
-                <ModalHeader>{modalTitle}</ModalHeader>
-                <ModalCloseButton />
-                <ModalBody>
-                    <SimpleGrid columns={2} spacing={5}>
-                        <Box>
-                            <Image src={inventoryItem.pictureAsset.s3_link}/>
-                        </Box>
-                        <Box>
-                            <Text>{inventoryItem.name}</Text>
-                            <Text>{inventoryItem.description}</Text>
-                            <Text>Price: {inventoryItem.price}</Text>
-                            <Text>Store stock: {inventoryItem.quantity}</Text>
-                            <Text>Buy: </Text>
-                            <Controller
-                                control={control}
-                                name="quantity"
-                                render={({ name, ...restProps }) => (
-                                    <NumberInput min={0} max={inventoryItem.quantity} {...restProps}>
-                                        <NumberInputField name={name}/>
-                                        <NumberInputStepper>
-                                            <NumberIncrementStepper />
-                                            <NumberDecrementStepper />
-                                        </NumberInputStepper>
-                                    </NumberInput>
+            <form
+                onSubmit={handleSubmit((data) =>{
+                    onSubmit(data.quantity);
+                    reset({ quantity: 0 });
+                })}
+            >
+                <ModalContent>
+                    <ModalHeader>{modalTitle}</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody>
+                        <SimpleGrid columns={2} spacing={5}>
+                            <Box>
+                                <Image src={inventoryItem.pictureAsset.s3_link}/>
+                            </Box>
+                            <Box>
+                                <Text>{inventoryItem.name}</Text>
+                                <Text>{inventoryItem.description}</Text>
+                                <Text>Price: {inventoryItem.price}</Text>
+                                <Text>Store stock: {inventoryItem.quantity}</Text>
+                                <Text>Buy: </Text>
+                                <Controller
+                                    control={control}
+                                    name="quantity"
+                                    render={(restProps) => {
+                                        const {name, ...fields} = restProps.field;
+                                        return (
+                                            <NumberInput {...fields} min={0} max={inventoryItem.quantity}>
+                                                <NumberInputField name={name} />
+                                                <NumberInputStepper>
+                                                    <NumberIncrementStepper />
+                                                    <NumberDecrementStepper />
+                                                </NumberInputStepper>
+                                            </NumberInput>
+                                        )
+                                    }}
+                                />
+                                {inventoryItem.quantity === 0 && (
+                                    <Text color={"red.500"}>Sold out</Text>
                                 )}
-                            />
-                            {inventoryItem.quantity === 0 && (
-                                <Text color={"red.500"}>Sold out</Text>
-                            )}
-                        </Box>
-                    </SimpleGrid>
-                </ModalBody>
-                <ModalFooter>
-                    <Button onClick={onClose} mr={3}>Close</Button>
-                    <Button 
-                        onClick={handleSubmit((data) => {
-                            console.log(data);
-                            onSubmit();
-                        })} 
-                        disabled={inventoryItem.quantity === 0}
-                    >
-                        Buy
-                    </Button>
-                </ModalFooter>
-            </ModalContent>
+                            </Box>
+                        </SimpleGrid>
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button onClick={onClose} mr={3}>Close</Button>
+                        <Button 
+                            type="submit"
+                            disabled={inventoryItem.quantity === 0}
+                        >
+                            Buy
+                        </Button>
+                    </ModalFooter>
+                </ModalContent>
+            </form>
         </Modal>
     );
 };
