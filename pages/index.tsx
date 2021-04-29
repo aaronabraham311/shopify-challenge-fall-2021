@@ -1,30 +1,27 @@
-import React from "react"
+import React, { useEffect, useCallback } from "react"
 import { GetStaticProps } from "next"
-import Layout from "../components/Layout"
-import Post, { PostProps } from "../components/Post"
+import NavBarContainer from "../components/NavBarContainer";
 import axios from "axios"
 
+import Grid from "../components/Grid";
+
 export const getStaticProps: GetStaticProps = async () => {
-  const feed = [
-    {
-      id: 1,
-      title: "Prisma is the perfect ORM for Next.js",
-      content: "[Prisma](https://github.com/prisma/prisma) and Next.js go _great_ together!",
-      published: false,
-      author: {
-        name: "Nikolas Burk",
-        email: "burk@prisma.io",
-      },
-    },
-  ]
-  return { props: { feed } }
+  const inventory = [];
+  return { props: { inventory } }
 }
 
-type Props = {
-  feed: PostProps[]
-}
+const Blog: React.FC = (props) => {
+  const [inventory, setInventory] = React.useState([]);
 
-const Blog: React.FC<Props> = (props) => {
+  const getInventory = useCallback(async () => {
+    const response = await axios.get('/api/inventory/getAll');
+    setInventory(response.data);
+  }, []);
+
+  useEffect(() => {
+    getInventory();
+  }, [getInventory]);
+
   const uploadPhoto = async(e) => {
     const file = e.target.files[0];
     const filename = encodeURIComponent(file.name);
@@ -54,35 +51,15 @@ const Blog: React.FC<Props> = (props) => {
     }
     const res = await axios.post('/api/inventory/create', body)
   }
+
+  console.log(inventory);
   
   return (
-    <Layout>
-      <div className="page">
-        <h1>Public Feed</h1>
-        <main>
-          {props.feed.map((post) => (
-            <div key={post.id} className="post">
-              <Post post={post} />
-            </div>
-          ))}
-        </main>
-        <input onChange={uploadPhoto} type="file" accept="image/png, image/jpeg"/>
-      </div>
-      <style jsx>{`
-        .post {
-          background: white;
-          transition: box-shadow 0.1s ease-in;
-        }
-
-        .post:hover {
-          box-shadow: 1px 1px 3px #aaa;
-        }
-
-        .post + .post {
-          margin-top: 2rem;
-        }
-      `}</style>
-    </Layout>
+    <>
+      <NavBarContainer />
+      <Grid inventory={inventory} />
+      <input onChange={uploadPhoto} type="file" accept="image/png, image/jpeg"/>
+    </>
   )
 }
 
