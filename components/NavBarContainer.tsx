@@ -1,7 +1,7 @@
 import React from "react";
 import { Flex, Link, Text, Spacer } from "@chakra-ui/react"
 
-const NavBarContainer: React.FC = () => {
+const NavBarContainer: React.FC = ({ handleLogin, admin, handleLogout }) => {
   return (
     <Flex
       as="nav"
@@ -14,8 +14,12 @@ const NavBarContainer: React.FC = () => {
     >
       <Text fontSize="4xl">Amethyst: A Shopify Dev Challenge</Text>
       <Spacer />
-      <Link display="block" alignContent="right">
-        <Text>Log in</Text>
+      <Link 
+        display="block" 
+        alignContent="right" 
+        onClick={admin ? handleLogout : handleLogin}
+      >
+        <Text>{admin ? "Log out" : "Log in"}</Text>
       </Link>
     </Flex>
   );

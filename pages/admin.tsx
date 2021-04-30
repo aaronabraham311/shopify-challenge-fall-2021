@@ -5,13 +5,14 @@ import NavBarContainer from "../components/NavBarContainer";
 import axios from "axios"
 
 import Grid from "../components/Grid";
+import AddInventory from "../components/AddInventory";
 
 export const getStaticProps: GetStaticProps = async () => {
   const inventory = [];
   return { props: { inventory } }
 }
 
-const MainPage: React.FC = (props) => {
+const AdminPage: React.FC = (props) => {
   const router = useRouter();
   const [inventory, setInventory] = React.useState([]);
 
@@ -44,14 +45,15 @@ const MainPage: React.FC = (props) => {
     copiedInventory[replaceIndex] = response.data;
     setInventory(copiedInventory);
   }
-  
-  const handleLogin = () => {
-    router.push('/admin');
+
+  const handleLogout = () => {
+    router.push('/');
   }
-  
+
   return (
     <>
-      <NavBarContainer handleLogin={handleLogin}/>
+      <NavBarContainer admin handleLogout={handleLogout}/>
+      <AddInventory />
       <Grid 
         inventory={inventory} 
         handleTransaction={handleTransactionSubmit}
@@ -60,4 +62,4 @@ const MainPage: React.FC = (props) => {
   )
 }
 
-export default MainPage
+export default AdminPage

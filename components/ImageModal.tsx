@@ -5,7 +5,6 @@ import {
     Image,
     Text,
     Button,
-    VStack,
     Modal,
     ModalOverlay,
     ModalContent,
