@@ -37,6 +37,7 @@ const AddInventory: React.FC = ({ handleInventorySubmit }) => {
         isOpen={modalOpen}
         onClose={handleClose}
         modalTitle={"Upload item to store"}
+        handleInventorySubmit={handleInventorySubmit}
       />
     </>
   );

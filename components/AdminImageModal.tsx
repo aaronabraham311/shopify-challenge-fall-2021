@@ -17,6 +17,7 @@ import {
     NumberInputField
 } from "@chakra-ui/react";
 import { useForm, Controller } from "react-hook-form";
+import axios from 'axios';
 
 // https://gist.github.com/Sqvall/23043a12a7fabf0f055198cb6ec39531
 const FileUpload = ({ register }) => {
@@ -34,27 +35,23 @@ const FileUpload = ({ register }) => {
 const AdminImageModal: React.FC = ({
     isOpen,
     onClose,
-    modalTitle
+    modalTitle,
+    handleInventorySubmit
 }) => {
-    const { handleSubmit, register, control } = useForm();
+    const [file, setFile] = React.useState(null);
+    const { handleSubmit, control, reset } = useForm();
 
-    const validateFiles = (value) => {
-        console.log(value);
-        if (value.length < 1) {
-            return 'Image is required'
-        }
-
-        if (value.size / (1024 * 1024) > 10) {
-            return 'Max image size is 10mb'
-        } 
-
-        return true;
+    const handleFileUpload = (e) => {
+        setFile(e.target.files[0]);
     }
 
-    const uploadPhoto = async(e) => {
-        const file = e.target.files[0];
+    const uploadPhoto = async({
+        name,
+        description,
+        price,
+        quantity
+    }) => {
         const filename = encodeURIComponent(file.name);
-        
         const response = await axios.post('/api/picture/presign', {
           file: filename,
         });
@@ -65,66 +62,105 @@ const AdminImageModal: React.FC = ({
           formData.append(key, value);
         });
     
-        const upload = await fetch(url, {
+        await fetch(url, {
           method: 'POST',
           body: formData 
         });
     
         const body = {
           filename: filename,
-          name: 'test',
-          description: 'test sample',
-          quantity: 0,
-          price: 0,
+          name,
+          description,
+          quantity: parseInt(quantity),
+          price: parseInt(price),
           tag: 'test'
         }
-        const res = await axios.post('/api/inventory/create', body)
+        const newItem = axios.post('/api/inventory/create', body);
+        setInventory([...inventory, newItem]);
       }
+    
+    const onSubmit = (data) => {
+        const parsedData = {
+            file,
+            name: data.name,
+            description: data.description,
+            quantity: parseInt(data.quantity),
+            price: parseFloat(data.price),
+        }
+        handleInventorySubmit(parsedData);
+        reset();
+        setFile(null);
+        onClose();
+    }
 
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <form
-                onSubmit={handleSubmit((data) =>{
-                    console.log(data);
-                })}
+                onSubmit={handleSubmit(onSubmit)}
             >
                 <ModalContent>
                     <ModalHeader>{modalTitle}</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-                        <SimpleGrid columns={2} spacing={5}>
-                            <Box>
-                                <Text>Upload image</Text>
-                                <Controller 
-                                    name="image"
-                                    control={control}
-                                    defaultValue={''}
-                                    render={props => 
-                                        <input 
-                                            name="image"
-                                            type="file" 
-                                            accept="image/png, image/jpeg"
-                                            {...props.field}
-                                        />      
-                                    }
-                                />
-                            </Box>
-                            <Box>
-                                <Text>Enter picture name</Text>
-                                <Input />
-                                <Text>Enter description</Text>
-                                <Input />
-                                <Text>Enter price</Text>
-                                <NumberInput min={0}>
-                                    <NumberInputField />
-                                </NumberInput>
-                                <Text>Enter number of items</Text>
-                                <NumberInput min={0}>
-                                    <NumberInputField />
-                                </NumberInput>
-                            </Box>
-                        </SimpleGrid>
+                        <Box mb={4}>
+                            <Text>Upload image</Text>
+                            <input
+                                required  
+                                name="image" 
+                                type="file" 
+                                accept="image/*"
+                                onChange={handleFileUpload} 
+                            />
+                        </Box>
+                        <Box>
+                            <Text>Enter picture name</Text>
+                            <Controller 
+                                name="name"
+                                control={control}
+                                defaultValue={''}
+                                render={props => 
+                                    <Input
+                                        name="name" 
+                                        {...props.field}
+                                    />
+                                }
+                            />
+                            <Text>Enter description</Text>
+                            <Controller 
+                                name="description"
+                                control={control}
+                                defaultValue={''}
+                                render={props => 
+                                    <Input 
+                                        name="description"
+                                        {...props.field}
+                                    />
+                                }
+                            />
+                            <Text>Enter price</Text>
+                            <Controller 
+                                name="price"
+                                control={control}
+                                defaultValue={0}
+                                render={props => 
+                                    <NumberInput {...props.field} min={0}>
+                                        <NumberInputField name="price" />
+                                    </NumberInput>
+                                }
+                            />
+                            <Text>Enter number of items</Text>
+                            <Controller 
+                                name="quantity"
+                                control={control}
+                                defaultValue={0}
+                                render={props => 
+                                    <NumberInput {...props.field} min={0}>
+                                        <NumberInputField name="quantity" />
+                                    </NumberInput>
+                                }
+                            />
+                        </Box>
                     </ModalBody>
                     <ModalFooter>
                         <Button onClick={onClose} mr={3}>Close</Button>

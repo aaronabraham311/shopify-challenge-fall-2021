@@ -50,10 +50,45 @@ const AdminPage: React.FC = (props) => {
     router.push('/');
   }
 
+  const handleInventorySubmit = async({
+    file,
+    name,
+    description,
+    price,
+    quantity
+}) => {
+    const filename = encodeURIComponent(file.name);
+    const response = await axios.post('/api/picture/presign', {
+      file: filename,
+    });
+    const { url, fields } = await response.data;
+    const formData = new FormData();
+
+    Object.entries({...fields, file}).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
+
+    await fetch(url, {
+      method: 'POST',
+      body: formData 
+    });
+
+    const body = {
+      filename: filename,
+      name,
+      description,
+      quantity,
+      price,
+      tag: 'test'
+    }
+    const newItem = await axios.post('/api/inventory/create', body);
+    setInventory([...inventory, newItem.data]);
+  }
+
   return (
     <>
       <NavBarContainer admin handleLogout={handleLogout}/>
-      <AddInventory />
+      <AddInventory handleInventorySubmit={handleInventorySubmit} />
       <Grid 
         inventory={inventory} 
         handleTransaction={handleTransactionSubmit}

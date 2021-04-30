@@ -26,6 +26,9 @@ export default async (req, res) => {
                 quantity,
                 price,
                 tag,
+            },
+            include: {
+                pictureAsset: true,
             }
         });
 
