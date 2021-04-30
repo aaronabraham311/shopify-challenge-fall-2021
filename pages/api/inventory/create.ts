@@ -1,4 +1,5 @@
 import prisma from '../../../prisma/index'; // Prisma client
+import  { imaggaCategorization } from "../../../utils/imagga";
 
 export default async (req, res) => {
     const {
@@ -7,11 +8,14 @@ export default async (req, res) => {
         description,
         quantity,
         price,
-        tag
     } = req.body;
 
     try {
         const s3Link = process.env.BASE_S3_LINK + filename
+        
+        // Tagging image
+        const tag = await imaggaCategorization(s3Link, process.env.IMAGGA_KEY, process.env.IMAGGA_SECRET); 
+
         // Create inventory and picture assets
         const inventory = await prisma.inventory.create({
             data: {

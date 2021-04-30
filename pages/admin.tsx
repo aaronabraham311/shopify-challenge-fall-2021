@@ -50,7 +50,7 @@ const AdminPage: React.FC = (props) => {
     router.push('/');
   }
 
-  const handleInventorySubmit = async({
+  const handleInventorySubmit = async ({
     file,
     name,
     description,
@@ -79,7 +79,6 @@ const AdminPage: React.FC = (props) => {
       description,
       quantity,
       price,
-      tag: 'test'
     }
     const newItem = await axios.post('/api/inventory/create', body);
     setInventory([...inventory, newItem.data]);
