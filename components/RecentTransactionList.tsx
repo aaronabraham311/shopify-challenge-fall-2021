@@ -19,6 +19,23 @@ const RecentTransactionList = () => {
         getRecentTransactions();
     }
 
+    const convertDate = (date) => {
+        const dateConverted = new Date(date);
+        let month = '' + (dateConverted.getMonth() + 1);
+        let day = '' + (dateConverted.getDate());
+        const year = dateConverted.getFullYear();
+
+        if (month.length < 2) {
+            month = '0' + month;
+        }
+
+        if (day.length < 2) {
+            day = '0' + day;
+        }
+
+        return [year, month, day].join('-');
+    }
+
     return (
         <Box>
             <IconButton
@@ -27,12 +44,13 @@ const RecentTransactionList = () => {
                 icon={<RepeatIcon />}
             />
             <Box>
-                <Text>Most recent transactions</Text>
+                <Text>Most recent transactions:</Text>
                 {recentTransactions.map((transaction) => (
-                    <Box>
-                        <Text>{transaction.date}</Text>
-                        <Text>{transaction.revenue}</Text>
-                        <Text>{transaction.quantity}</Text>
+                    <Box borderRadius="md" bg="teal" color="white" mt="5" p="3">
+                        <Text>Item bought: {transaction.pictureAsset.inventory.name}</Text>
+                        <Text>Date of transaction: {convertDate(transaction.date)}</Text>
+                        <Text>Transaction revenue: ${transaction.revenue}</Text>
+                        <Text>Quantity bought: {transaction.quantity}</Text>
                     </Box>
                 ))}
             </Box>
