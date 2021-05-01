@@ -3,10 +3,12 @@ import { GetStaticProps } from "next"
 import { useRouter } from "next/router";
 import NavBarContainer from "../components/NavBarContainer";
 import axios from "axios"
+import { SimpleGrid } from "@chakra-ui/react";
 
 import Grid from "../components/Grid";
 import AddInventory from "../components/AddInventory";
 import RevenueGraph from "../components/RevenueGraph";
+import RecentTransactionList from "../components/RecentTransactionList";
 
 export const getStaticProps: GetStaticProps = async () => {
   const inventory = [];
@@ -88,7 +90,10 @@ const AdminPage: React.FC = (props) => {
   return (
     <>
       <NavBarContainer admin handleLogout={handleLogout}/>
-      <RevenueGraph />
+      <SimpleGrid columns={2} spacing="40" p="10">
+        <RevenueGraph />
+        <RecentTransactionList />
+      </SimpleGrid>
       <AddInventory handleInventorySubmit={handleInventorySubmit} />
       <Grid 
         inventory={inventory} 

@@ -10,9 +10,8 @@ export default async (req, res) => {
         res.status(200).json(data);
 
     } catch (e) {
-        console.log(e);
         return res.status(400).json({
-            error: 'Failed to buy item',
+            error: 'Failed to get graph data',
         });
     }
 }
