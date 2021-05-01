@@ -6,6 +6,7 @@ import axios from "axios"
 
 import Grid from "../components/Grid";
 import AddInventory from "../components/AddInventory";
+import RevenueGraph from "../components/RevenueGraph";
 
 export const getStaticProps: GetStaticProps = async () => {
   const inventory = [];
@@ -87,6 +88,7 @@ const AdminPage: React.FC = (props) => {
   return (
     <>
       <NavBarContainer admin handleLogout={handleLogout}/>
+      <RevenueGraph />
       <AddInventory handleInventorySubmit={handleInventorySubmit} />
       <Grid 
         inventory={inventory} 
