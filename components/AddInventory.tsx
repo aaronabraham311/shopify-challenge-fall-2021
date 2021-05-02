@@ -4,7 +4,13 @@ import { AddIcon } from "@chakra-ui/icons";
 
 import AdminImageModal from "./AdminImageModal";
 
-const AddInventory: React.FC = ({ handleInventorySubmit }) => {
+const AddInventory: React.FC = ({ 
+  handleInventorySubmit,
+  edit,
+  handleEditClose,
+  handleEditSubmit,
+  editItem, 
+}) => {
   const [modalOpen, setModalOpen] = React.useState(false);
 
   const handleOpen = () => {
@@ -12,10 +18,6 @@ const AddInventory: React.FC = ({ handleInventorySubmit }) => {
   } 
 
   const handleClose = () => {
-    setModalOpen(false);
-  }
-
-  const handleSubmit = () => {
     setModalOpen(false);
   }
 
@@ -36,10 +38,14 @@ const AddInventory: React.FC = ({ handleInventorySubmit }) => {
         />
       </Flex>
       <AdminImageModal 
-        isOpen={modalOpen}
+        isOpen={modalOpen || edit}
         onClose={handleClose}
-        modalTitle={"Upload item to store"}
+        modalTitle={edit ? "Edit item" : "Upload item to store"}
         handleInventorySubmit={handleInventorySubmit}
+        edit={edit}
+        handleInventoryEdit={handleEditSubmit}
+        handleEditClose={handleEditClose}
+        editItem={editItem}
       />
     </>
   );

@@ -21,7 +21,11 @@ const AdminImageModal: React.FC = ({
     isOpen,
     onClose,
     modalTitle,
-    handleInventorySubmit
+    handleInventorySubmit,
+    edit,
+    handleInventoryEdit,
+    handleEditClose,
+    editItem
 }) => {
     const [file, setFile] = React.useState(null);
     const { handleSubmit, control, reset } = useForm();
@@ -32,20 +36,37 @@ const AdminImageModal: React.FC = ({
     
     const onSubmit = (data) => {
         const parsedData = {
-            file,
             name: data.name,
             description: data.description,
             quantity: parseInt(data.quantity),
             price: parseFloat(data.price),
         }
-        handleInventorySubmit(parsedData);
+
+        if (edit) {
+            handleInventoryEdit({
+                ...parsedData, id: editItem.id
+            })
+        } else {
+
+            handleInventorySubmit({
+                ...parsedData, file
+            });
+        }
         reset();
         setFile(null);
         onClose();
     }
 
+    const handleClose = () => {
+        if (edit) {
+            handleEditClose();
+        } else {
+            onClose();
+        }
+    }
+
     return (
-        <Modal isOpen={isOpen} onClose={onClose}>
+        <Modal isOpen={isOpen} onClose={handleClose}>
             <ModalOverlay />
             <form
                 onSubmit={handleSubmit(onSubmit)}
@@ -54,22 +75,24 @@ const AdminImageModal: React.FC = ({
                     <ModalHeader>{modalTitle}</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-                        <Box mb={4}>
-                            <Text>Upload image</Text>
-                            <input
-                                required  
-                                name="image" 
-                                type="file" 
-                                accept="image/*"
-                                onChange={handleFileUpload} 
-                            />
-                        </Box>
+                        {!edit && (
+                            <Box mb={4}>
+                                <Text>Upload image</Text>
+                                <input
+                                    required  
+                                    name="image" 
+                                    type="file" 
+                                    accept="image/*"
+                                    onChange={handleFileUpload} 
+                                />
+                            </Box>
+                        )}
                         <Box>
                             <Text>Enter picture name</Text>
                             <Controller 
                                 name="name"
                                 control={control}
-                                defaultValue={''}
+                                defaultValue={edit ? editItem.name : ''}
                                 render={props => 
                                     <Input
                                         name="name" 
@@ -81,7 +104,7 @@ const AdminImageModal: React.FC = ({
                             <Controller 
                                 name="description"
                                 control={control}
-                                defaultValue={''}
+                                defaultValue={edit ? editItem.description: ''}
                                 render={props => 
                                     <Input 
                                         name="description"
@@ -93,9 +116,9 @@ const AdminImageModal: React.FC = ({
                             <Controller 
                                 name="price"
                                 control={control}
-                                defaultValue={0}
+                                defaultValue={edit ? editItem.price : 0}
                                 render={props => 
-                                    <NumberInput {...props.field} min={0}>
+                                    <NumberInput {...props.field} min={0} precision={2}>
                                         <NumberInputField name="price" />
                                     </NumberInput>
                                 }
@@ -104,9 +127,9 @@ const AdminImageModal: React.FC = ({
                             <Controller 
                                 name="quantity"
                                 control={control}
-                                defaultValue={0}
+                                defaultValue={edit ? editItem.quantity: 0}
                                 render={props => 
-                                    <NumberInput {...props.field} min={0}>
+                                    <NumberInput {...props.field} min={0} precision={0}>
                                         <NumberInputField name="quantity" />
                                     </NumberInput>
                                 }
@@ -114,11 +137,11 @@ const AdminImageModal: React.FC = ({
                         </Box>
                     </ModalBody>
                     <ModalFooter>
-                        <Button onClick={onClose} mr={3}>Close</Button>
+                        <Button onClick={handleClose} mr={3}>Close</Button>
                         <Button 
                             type="submit"
                         >
-                            Submit
+                            {edit ? "Edit" : "Submit"}
                         </Button>
                     </ModalFooter>
                 </ModalContent>

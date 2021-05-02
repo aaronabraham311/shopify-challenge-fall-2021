@@ -18,15 +18,17 @@ export const getStaticProps: GetStaticProps = async () => {
 const AdminPage: React.FC = (props) => {
   const router = useRouter();
   const [inventory, setInventory] = React.useState([]);
+  const [editOpen, setEditOpen] = React.useState(false);
+  const [editItem, setEditItem] = React.useState({});
 
-  const getInventory = useCallback(async () => {
+  const getInventory = async () => {
     const response = await axios.get('/api/inventory/getAll');
     setInventory(response.data);
-  }, []);
+  };
 
   useEffect(() => {
     getInventory();
-  }, [getInventory]);
+  }, []);
 
   const handleTransactionSubmit = async ({ 
     itemId,
@@ -59,7 +61,7 @@ const AdminPage: React.FC = (props) => {
     description,
     price,
     quantity
-}) => {
+  }) => {
     const filename = encodeURIComponent(file.name);
     const response = await axios.post('/api/picture/presign', {
       file: filename,
@@ -87,6 +89,42 @@ const AdminPage: React.FC = (props) => {
     setInventory([...inventory, newItem.data]);
   }
 
+  const handleInventoryEditSubmit = async ({
+    id,
+    name,
+    description,
+    price,
+    quantity
+  }) => {
+    const response = await axios.put('/api/inventory/edit', {
+      id,
+      name,
+      description,
+      price,
+      quantity
+    });
+
+    const replaceIndex = inventory.findIndex(
+      (item) => item.id === response.data.id
+    );
+    const copiedInventory = [...inventory];
+    copiedInventory[replaceIndex] = response.data;
+    setInventory(copiedInventory);
+    setEditOpen(false);
+    setEditItem({});
+  }
+
+  const handleInventoryEditClose = () => {
+    setEditOpen(false);
+    setEditItem({});
+  }
+
+  const handleInventoryEditClick = (item) => {
+    console.log(item);
+    setEditOpen(true);
+    setEditItem(item);
+  }
+
   const handleInventoryDelete = async ({ 
     inventoryId, 
     pictureId, 
@@ -110,11 +148,18 @@ const AdminPage: React.FC = (props) => {
         <RevenueGraph />
         <RecentTransactionList />
       </SimpleGrid>
-      <AddInventory handleInventorySubmit={handleInventorySubmit} />
+      <AddInventory 
+        handleInventorySubmit={handleInventorySubmit} 
+        edit={editOpen}
+        handleEditClose={handleInventoryEditClose}
+        handleEditSubmit={handleInventoryEditSubmit}
+        editItem={editItem}
+      />
       <Grid 
         inventory={inventory} 
         handleTransaction={handleTransactionSubmit}
         handleInventoryDelete={handleInventoryDelete}
+        handleEditClick={handleInventoryEditClick}
         admin
       />
     </>

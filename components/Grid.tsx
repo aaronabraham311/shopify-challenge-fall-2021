@@ -7,6 +7,7 @@ const Grid: React.FC = ({
   inventory, 
   handleTransaction,
   handleInventoryDelete,
+  handleEditClick,
   admin
 }) => {
   return (
@@ -19,6 +20,7 @@ const Grid: React.FC = ({
                 inventoryItem={item}
                 handleTransaction={handleTransaction}
                 handleInventoryDelete={handleInventoryDelete}
+                handleEditClick={handleEditClick}
                 admin={admin}
             />
         }))}

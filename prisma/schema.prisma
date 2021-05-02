@@ -21,8 +21,8 @@ model PictureAsset {
 
 model Transaction {
   id                  Int                @id @default(autoincrement())
-  pictureAsset        PictureAsset?       @relation(fields: [pictureAssetId], references: [id])
-  pictureAssetId      Int                @map("pa_id")
+  pictureAsset        PictureAsset?      @relation(fields: [pictureAssetId], references: [id])
+  pictureAssetId      Int?               @map("pa_id")
   quantity            Int
   price               Float
   revenue             Float
