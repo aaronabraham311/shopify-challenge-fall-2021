@@ -1,11 +1,9 @@
 import React from "react";
 import {
     Box,
-    SimpleGrid,
     Text,
     Button,
     Input,
-    InputGroup,
     Modal,
     ModalOverlay,
     ModalContent,
@@ -17,20 +15,7 @@ import {
     NumberInputField
 } from "@chakra-ui/react";
 import { useForm, Controller } from "react-hook-form";
-import axios from 'axios';
 
-// https://gist.github.com/Sqvall/23043a12a7fabf0f055198cb6ec39531
-const FileUpload = ({ register }) => {
-    return (
-        <InputGroup>
-            <input 
-                type="file" 
-                accept="image/png, image/jpeg"
-                ref={register}
-            />
-        </InputGroup>
-    )
-}
 
 const AdminImageModal: React.FC = ({
     isOpen,
@@ -44,40 +29,6 @@ const AdminImageModal: React.FC = ({
     const handleFileUpload = (e) => {
         setFile(e.target.files[0]);
     }
-
-    const uploadPhoto = async({
-        name,
-        description,
-        price,
-        quantity
-    }) => {
-        const filename = encodeURIComponent(file.name);
-        const response = await axios.post('/api/picture/presign', {
-          file: filename,
-        });
-        const { url, fields } = await response.data;
-        const formData = new FormData();
-    
-        Object.entries({...fields, file}).forEach(([key, value]) => {
-          formData.append(key, value);
-        });
-    
-        await fetch(url, {
-          method: 'POST',
-          body: formData 
-        });
-    
-        const body = {
-          filename: filename,
-          name,
-          description,
-          quantity: parseInt(quantity),
-          price: parseInt(price),
-          tag: 'test'
-        }
-        const newItem = axios.post('/api/inventory/create', body);
-        setInventory([...inventory, newItem]);
-      }
     
     const onSubmit = (data) => {
         const parsedData = {

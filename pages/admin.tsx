@@ -87,6 +87,22 @@ const AdminPage: React.FC = (props) => {
     setInventory([...inventory, newItem.data]);
   }
 
+  const handleInventoryDelete = async ({ 
+    inventoryId, 
+    pictureId, 
+    filename 
+  }) => {
+    await axios.post('/api/inventory/delete', {
+      inventoryId,
+      pictureId,
+      filename
+    });
+    const modifiedInventory = inventory.filter(
+      (item) => item.id !== inventoryId
+    );
+    setInventory(modifiedInventory);
+  }
+
   return (
     <>
       <NavBarContainer admin handleLogout={handleLogout}/>
@@ -98,6 +114,8 @@ const AdminPage: React.FC = (props) => {
       <Grid 
         inventory={inventory} 
         handleTransaction={handleTransactionSubmit}
+        handleInventoryDelete={handleInventoryDelete}
+        admin
       />
     </>
   )

@@ -8,7 +8,9 @@ const ImageCard: React.FC = ({
     imageTag,
     itemTitle,
     inventoryItem,
-    handleTransaction
+    handleTransaction,
+    handleInventoryDelete,
+    admin
 }) => {
     const [modalOpen, setModalOpen] = React.useState(false);
 
@@ -56,6 +58,8 @@ const ImageCard: React.FC = ({
                 onSubmit={handleSubmit}
                 modalTitle="Buy picture"
                 inventoryItem={inventoryItem}
+                onDelete={handleInventoryDelete}
+                admin={admin}
             />
         </>
     );

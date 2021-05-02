@@ -15,12 +15,18 @@ export default async (req, res) => {
         // Deleting S3 image from bucket
         const s3 = new AWS.S3();
 
-        const s3Deletion = await s3.deleteObject({
-            Bucket: process.env.BUCKET_NAME,
-            Key: filename
+        const s3Deletion = await new Promise(async (resolve, reject) => {
+            await s3.deleteObject({
+                Bucket: process.env.BUCKET_NAME,
+                Key: filename
+            }, function(err, data){
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(data);
+                }
+            });
         });
-        
-        console.log(s3Deletion);
 
         if (!s3Deletion) {
             return res.status(400).json({
@@ -35,19 +41,13 @@ export default async (req, res) => {
             }
         });
 
-        const deleteInventory = await prisma.inventory.delete({
-            where: {
-                id: inventoryId,
-            }
-        });
-
-        if (!deleteAsset || !deleteInventory) {
+        if (!deleteAsset) {
             return res.status(400).json({
                 error: 'Error deleting inventory and asset from tables'
             })
         }
 
-        return res.status(200);
+        return res.status(200).json(deleteAsset);
     } catch (e) {
         console.log(e);
         return res.status(400).json({

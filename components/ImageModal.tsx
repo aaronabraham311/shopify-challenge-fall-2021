@@ -24,14 +24,25 @@ const ImageModal: React.FC = ({
     isOpen,
     onClose,
     onSubmit,
+    onDelete,
     modalTitle,
-    inventoryItem
+    inventoryItem,
+    admin
 }) => {
     const { control, handleSubmit, reset } = useForm({
         defaultValues: {
             quantity: 0,
         }
-    })
+    });
+
+    const handleDelete = () => {
+        onDelete({
+            inventoryId: inventoryItem.id,
+            pictureId: inventoryItem.pictureAssetId,
+            filename: inventoryItem.pictureAsset.s3_key,
+        });
+        onClose();
+    }
 
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
@@ -80,12 +91,19 @@ const ImageModal: React.FC = ({
                     </ModalBody>
                     <ModalFooter>
                         <Button onClick={onClose} mr={3}>Close</Button>
-                        <Button 
-                            type="submit"
-                            disabled={inventoryItem.quantity === 0}
-                        >
-                            Buy
-                        </Button>
+                        {!admin && (
+                            <Button 
+                                type="submit"
+                                disabled={inventoryItem.quantity === 0}
+                            >
+                                Buy
+                            </Button>
+                        )}
+                        {admin && (
+                            <Button color="white" bg="red.500" onClick={handleDelete}>
+                                Delete
+                            </Button>
+                        )}
                     </ModalFooter>
                 </ModalContent>
             </form>
