@@ -33,13 +33,18 @@ const ImageCard: React.FC = ({
     return (
         <>
             <Box onClick={handleOpen}>
-                <Box height="250px">
-                    <Image src={imageFilename}/>
+                <Box height="230px">
+                    <Image src={imageFilename} maxH="250px"/>
                 </Box>
                 <Box pl="6" pt="6" alignItems="baseline">
                     <Badge borderRadius="full" px="2" colorScheme="teal">
                         {imageTag}
                     </Badge>
+                    {inventoryItem.quantity === 0 && (
+                        <Badge borderRadius="full" px="2" ml="10" colorScheme="red">
+                            Sold Out
+                        </Badge>
+                    )}
                 </Box>
                 <Box mt="1" fontWeight="semibold" as="h4" lineHeight="tight" pl="6" pt="6">
                     {itemTitle}

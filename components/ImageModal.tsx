@@ -42,20 +42,20 @@ const ImageModal: React.FC = ({
                     reset({ quantity: 0 });
                 })}
             >
-                <ModalContent>
+                <ModalContent maxW="800px">
                     <ModalHeader>{modalTitle}</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
                         <SimpleGrid columns={2} spacing={5}>
                             <Box>
-                                <Image src={inventoryItem.pictureAsset.s3_link}/>
+                                <Image maxW="300px" src={inventoryItem.pictureAsset.s3_link}/>
                             </Box>
                             <Box>
-                                <Text>{inventoryItem.name}</Text>
-                                <Text>{inventoryItem.description}</Text>
-                                <Text>Price: {inventoryItem.price}</Text>
-                                <Text>Store stock: {inventoryItem.quantity}</Text>
-                                <Text>Buy: </Text>
+                                <Text mt="2" mb="1"><b>Item name:</b> {inventoryItem.name}</Text>
+                                <Text mt="1" mb="1"><b>Item description:</b> {inventoryItem.description}</Text>
+                                <Text mt="1" mb="1"><b>Price:</b> ${inventoryItem.price}</Text>
+                                <Text mt="1" mb="1"><b>Store stock:</b> {inventoryItem.quantity}</Text>
+                                <Text mt="1" mb="1"><b>Buy:</b></Text>
                                 <Controller
                                     control={control}
                                     name="quantity"

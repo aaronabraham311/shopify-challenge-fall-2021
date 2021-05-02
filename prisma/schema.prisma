@@ -32,7 +32,7 @@ model Transaction {
 
 model Inventory {
   id                  Int                @id @default(autoincrement())
-  pictureAsset        PictureAsset       @relation(fields: [pictureAssetId], references: [id])
+  pictureAsset        PictureAsset?      @relation(fields: [pictureAssetId], references: [id])
   pictureAssetId      Int                @map("pa_id")
   name                String
   description         String

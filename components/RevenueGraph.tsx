@@ -1,16 +1,18 @@
 import React, { useEffect } from "react";
-import { Box, IconButton } from "@chakra-ui/react";
+import { Box, Text, IconButton, Flex, Spacer } from "@chakra-ui/react";
 import { RepeatIcon } from "@chakra-ui/icons";
 import { Line } from "react-chartjs-2";
 import axios from "axios";
 
 const RevenueGraph = () => {
     const [weekData, setWeekData] = React.useState({});
+    const [totalRevenue, setTotalRevenue] = React.useState(0);
 
     const getWeekData = async () => {
         const response = await axios.get('/api/transaction/get');
-        const labels = response.data.map(items => items.date);
-        const data = response.data.map(items => items.sum);
+        const { weekRevenue, totalRevenue} = response.data;
+        const labels = weekRevenue.map(items => items.date);
+        const data = weekRevenue.map(items => items.sum);
         const lineObj = {
             labels,
             datasets: [{
@@ -21,6 +23,7 @@ const RevenueGraph = () => {
             }]
         }
         setWeekData(lineObj);
+        setTotalRevenue(totalRevenue.sum.revenue);
     };
     
     useEffect(() => {
@@ -33,11 +36,15 @@ const RevenueGraph = () => {
 
     return (
         <Box>
-            <IconButton
-                aria-label="Fetch data"
-                onClick={handleLoadClick}
-                icon={<RepeatIcon />}
-            />
+            <Flex>
+                <Text fontSize="lg" as="b">Total revenue: ${totalRevenue}</Text>
+                <Spacer />
+                <IconButton
+                    aria-label="Fetch data"
+                    onClick={handleLoadClick}
+                    icon={<RepeatIcon />}
+                />
+            </Flex>
             <Box>
                 <Line data={weekData} />
             </Box>

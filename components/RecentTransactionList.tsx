@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Box, IconButton, Text } from "@chakra-ui/react";
+import { Box, IconButton, Text, Flex, Spacer } from "@chakra-ui/react";
 import { RepeatIcon } from "@chakra-ui/icons";
 import axios from "axios";
 
@@ -38,19 +38,21 @@ const RecentTransactionList = () => {
 
     return (
         <Box>
-            <IconButton
-                aria-label="Fetch transactions"
-                onClick={handleLoadClick}
-                icon={<RepeatIcon />}
-            />
+            <Flex>
+                <Text fontSize="lg" as="b">Most recent transactions</Text>
+                <Spacer />
+                <IconButton
+                    aria-label="Fetch transactions"
+                    onClick={handleLoadClick}
+                    icon={<RepeatIcon />}
+                />
+            </Flex>
             <Box>
-                <Text>Most recent transactions:</Text>
                 {recentTransactions.map((transaction) => (
                     <Box borderRadius="md" bg="teal" color="white" mt="5" p="3">
-                        <Text>Item bought: {transaction.pictureAsset.inventory.name}</Text>
-                        <Text>Date of transaction: {convertDate(transaction.date)}</Text>
-                        <Text>Transaction revenue: ${transaction.revenue}</Text>
-                        <Text>Quantity bought: {transaction.quantity}</Text>
+                        <Text><b>Date of transaction:</b> {convertDate(transaction.date)}</Text>
+                        <Text><b>Transaction revenue:</b> ${transaction.revenue}</Text>
+                        <Text><b>Quantity bought:</b> {transaction.quantity}</Text>
                     </Box>
                 ))}
             </Box>

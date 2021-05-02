@@ -10,13 +10,6 @@ export default async (req, res) => {
                     date: 'desc',
                 }
             ],
-            include: {
-                pictureAsset: {
-                    include: {
-                        inventory: true,
-                    }
-                },
-            }
         });
 
         return res.status(200).json(recentThree);

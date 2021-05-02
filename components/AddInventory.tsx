@@ -1,5 +1,5 @@
 import React from "react";
-import { Flex, IconButton } from "@chakra-ui/react"
+import { Flex, IconButton, Spacer } from "@chakra-ui/react"
 import { AddIcon } from "@chakra-ui/icons";
 
 import AdminImageModal from "./AdminImageModal";
@@ -23,12 +23,14 @@ const AddInventory: React.FC = ({ handleInventorySubmit }) => {
     <>
       <Flex 
         alignContent="flex-end"
+        justifyContent="space-between"
         w="100%"
         p={8}
         bg="transparent"
       >
+        <Spacer />
         <IconButton 
-          aria-label="Add picture" 
+          aria-label="Add picture"
           onClick={handleOpen}
           icon={<AddIcon />} 
         />
