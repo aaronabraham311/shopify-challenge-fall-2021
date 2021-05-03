@@ -21,6 +21,7 @@
     "chart.js": "^3.2.0",
     "framer-motion": "^4.1.11",
     "next": "9.5.5",
+    "next-auth": "^3.19.5",
     "react": "16.14.0",
     "react-chartjs-2": "^3.0.3",
     "react-dom": "16.14.0",

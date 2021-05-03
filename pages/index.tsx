@@ -1,6 +1,7 @@
 import React, { useEffect, useCallback } from "react"
 import { GetStaticProps } from "next"
 import { useRouter } from "next/router";
+import { signIn } from "next-auth/client";
 import NavBarContainer from "../components/NavBarContainer";
 import axios from "axios"
 
@@ -61,13 +62,11 @@ const MainPage: React.FC = (props) => {
     setInventory(copiedInventory);
   }
   
-  const handleLogin = () => {
-    router.push('/admin');
-  }
-  
   return (
     <>
-      <NavBarContainer handleLogin={handleLogin}/>
+      <NavBarContainer handleLogin={() => signIn(undefined, {
+        callbackUrl: 'http://localhost:3000/admin'
+      })}/>
       <Grid 
         inventory={
           filteredInventory.length > 0 || query !== '' ? filteredInventory : inventory

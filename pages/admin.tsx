@@ -1,18 +1,26 @@
-import React, { useEffect, useCallback } from "react"
-import { GetStaticProps } from "next"
+import React, { useEffect } from "react"
+import { GetServerSideProps } from "next"
 import { useRouter } from "next/router";
 import NavBarContainer from "../components/NavBarContainer";
 import axios from "axios"
 import { SimpleGrid } from "@chakra-ui/react";
+import { getSession, signOut } from 'next-auth/client';
 
 import Grid from "../components/Grid";
 import AddInventory from "../components/AddInventory";
 import RevenueGraph from "../components/RevenueGraph";
 import RecentTransactionList from "../components/RecentTransactionList";
 
-export const getStaticProps: GetStaticProps = async () => {
-  const inventory = [];
-  return { props: { inventory } }
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await getSession(context);
+  const res = context.res;
+  if(!session) {
+    res.setHeader('location', '/');
+    res.statusCode = 302;
+    res.end();
+  }
+
+  return { props: {} }
 }
 
 const AdminPage: React.FC = (props) => {
@@ -60,10 +68,6 @@ const AdminPage: React.FC = (props) => {
     const copiedInventory = [...inventory];
     copiedInventory[replaceIndex] = response.data;
     setInventory(copiedInventory);
-  }
-
-  const handleLogout = () => {
-    router.push('/');
   }
 
   const handleInventorySubmit = async ({
@@ -158,7 +162,7 @@ const AdminPage: React.FC = (props) => {
 
   return (
     <>
-      <NavBarContainer admin handleLogout={handleLogout}/>
+      <NavBarContainer admin handleLogout={() => signOut({ callbackUrl: 'http://localhost:3000/'})}/>
       <SimpleGrid columns={2} spacing="40" p="10">
         <RevenueGraph />
         <RecentTransactionList />
