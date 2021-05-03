@@ -18,8 +18,10 @@ export const getStaticProps: GetStaticProps = async () => {
 const AdminPage: React.FC = (props) => {
   const router = useRouter();
   const [inventory, setInventory] = React.useState([]);
+  const [filteredInventory, setFilteredInventory] = React.useState([]);
   const [editOpen, setEditOpen] = React.useState(false);
   const [editItem, setEditItem] = React.useState({});
+  const [query, setQuery] = React.useState('');
 
   const getInventory = async () => {
     const response = await axios.get('/api/inventory/getAll');
@@ -29,6 +31,15 @@ const AdminPage: React.FC = (props) => {
   useEffect(() => {
     getInventory();
   }, []);
+
+  useEffect(() => {
+    if (query === '') {
+      setFilteredInventory([]);
+    } else {
+      const filteredInventory = inventory.filter(item => item.tag.includes(query));
+      setFilteredInventory(filteredInventory);
+    }
+  }, [query])
 
   const handleTransactionSubmit = async ({ 
     itemId,
@@ -141,6 +152,10 @@ const AdminPage: React.FC = (props) => {
     setInventory(modifiedInventory);
   }
 
+  const handleQueryChange = (e) => {
+    setQuery(e.target.value);
+  }
+
   return (
     <>
       <NavBarContainer admin handleLogout={handleLogout}/>
@@ -156,10 +171,14 @@ const AdminPage: React.FC = (props) => {
         editItem={editItem}
       />
       <Grid 
-        inventory={inventory} 
+        inventory={
+          filteredInventory.length > 0 || query !== '' ? filteredInventory : inventory
+        } 
         handleTransaction={handleTransactionSubmit}
         handleInventoryDelete={handleInventoryDelete}
         handleEditClick={handleInventoryEditClick}
+        query={query}
+        handleQueryChange={handleQueryChange}
         admin
       />
     </>

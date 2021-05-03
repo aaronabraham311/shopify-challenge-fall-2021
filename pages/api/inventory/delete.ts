@@ -35,19 +35,25 @@ export default async (req, res) => {
         }
 
         // Deleting picture asset and inventory in single transaction
-        const deleteAsset = await prisma.pictureAsset.delete({
+        const deleteInventory = await prisma.inventory.delete({
             where: {
-                id: pictureId,
+                id: inventoryId,
             }
         });
 
-        if (!deleteAsset) {
+        const deleteAsset = await prisma.pictureAsset.delete({
+            where: {
+                id: pictureId
+            }
+        });
+
+        if (!deleteInventory || !deleteAsset) {
             return res.status(400).json({
                 error: 'Error deleting inventory and asset from tables'
             })
         }
 
-        return res.status(200).json(deleteAsset);
+        return res.status(200).json(deleteInventory);
     } catch (e) {
         console.log(e);
         return res.status(400).json({
