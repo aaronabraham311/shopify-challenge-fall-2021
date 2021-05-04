@@ -18,8 +18,20 @@ import {
 import { EditIcon, DeleteIcon } from "@chakra-ui/icons";
 
 import ImageModal from "./ImageModal";
+import { InventoryItemType } from "../utils/types"; 
 
-const ImageCard: React.FC = ({
+type ImageCardProps = {
+    imageFilename: string;
+    imageTag: string;
+    itemTitle: string;
+    inventoryItem: InventoryItemType;
+    handleTransaction?: ({ itemId, pictureAssetId, quantity, price}) => void;
+    handleInventoryDelete?: ({ inventoryId, pictureId, filename }) => void;
+    handleEditClick?: (item: InventoryItemType) => void;
+    admin?: boolean;
+}
+
+const ImageCard = ({
     imageFilename,
     imageTag,
     itemTitle,
@@ -28,7 +40,7 @@ const ImageCard: React.FC = ({
     handleInventoryDelete,
     handleEditClick,
     admin
-}) => {
+}: ImageCardProps) => {
     const [modalOpen, setModalOpen] = React.useState(false);
     const [deleteModalOpen, setDeleteModalOpen] = React.useState(false);
 

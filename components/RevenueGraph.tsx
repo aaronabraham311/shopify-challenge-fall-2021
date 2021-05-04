@@ -46,7 +46,7 @@ const RevenueGraph = () => {
                 />
             </Flex>
             <Box>
-                <Line data={weekData} />
+                <Line type='line' data={weekData} />
             </Box>
         </Box>
     )

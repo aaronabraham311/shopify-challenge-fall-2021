@@ -1,3 +1,4 @@
+// @ts-nocheck
 import axios from 'axios';
 
 const s3Upload = async (file) => {

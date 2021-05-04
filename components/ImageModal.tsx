@@ -20,14 +20,25 @@ import {
 } from "@chakra-ui/react";
 import { useForm, Controller } from "react-hook-form";
 
-const ImageModal: React.FC = ({
+import { InventoryItemType } from "../utils/types"; 
+
+type ImageModalProps = {
+    isOpen: boolean;
+    onClose: () => void;
+    onSubmit: (quantity: number) => void;
+    modalTitle: string;
+    inventoryItem: InventoryItemType;
+    admin?: boolean;
+}
+
+const ImageModal = ({
     isOpen,
     onClose,
     onSubmit,
     modalTitle,
     inventoryItem,
     admin
-}) => {
+}: ImageModalProps) => {
     const { control, handleSubmit, reset } = useForm({
         defaultValues: {
             quantity: 0,

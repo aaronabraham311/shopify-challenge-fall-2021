@@ -1,6 +1,5 @@
 import React, { useEffect, useCallback } from "react"
 import { GetStaticProps } from "next"
-import { useRouter } from "next/router";
 import { signIn } from "next-auth/client";
 import NavBarContainer from "../components/NavBarContainer";
 import axios from "axios"
@@ -8,12 +7,10 @@ import axios from "axios"
 import Grid from "../components/Grid";
 
 export const getStaticProps: GetStaticProps = async () => {
-  const inventory = [];
-  return { props: { inventory } }
+  return { props: {} }
 }
 
 const MainPage: React.FC = (props) => {
-  const router = useRouter();
   const [inventory, setInventory] = React.useState([]);
   const [filteredInventory, setFilteredInventory] = React.useState([]);
   const [query, setQuery] = React.useState('');

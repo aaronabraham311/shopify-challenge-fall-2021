@@ -19,7 +19,9 @@
     "jsx": "preserve"
   },
   "exclude": [
-    "node_modules"
+    "./node_modules",
+    "./pages/api/auth/[...nextauth].ts",
+    "./utils/s3Upload.ts",    
   ],
   "include": [
     "next-env.d.ts",

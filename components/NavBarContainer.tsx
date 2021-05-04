@@ -1,7 +1,17 @@
 import React from "react";
 import { Flex, Link, Text, Spacer } from "@chakra-ui/react"
 
-const NavBarContainer: React.FC = ({ handleLogin, admin, handleLogout }) => {
+type NavBarContainerProps = {
+  handleLogin?: () => void;
+  admin?: boolean;
+  handleLogout?: () => void;
+}
+
+const NavBarContainer = ({ 
+    handleLogin, 
+    admin, 
+    handleLogout 
+}: NavBarContainerProps) => {
   return (
     <Flex
       as="nav"

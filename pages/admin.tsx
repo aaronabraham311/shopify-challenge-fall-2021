@@ -11,6 +11,7 @@ import AddInventory from "../components/AddInventory";
 import RevenueGraph from "../components/RevenueGraph";
 import RecentTransactionList from "../components/RecentTransactionList";
 import s3Upload from "../utils/s3Upload";
+import { InventoryItemType } from "../utils/types"; 
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
@@ -29,7 +30,7 @@ const AdminPage: React.FC = (props) => {
   const [inventory, setInventory] = React.useState([]);
   const [filteredInventory, setFilteredInventory] = React.useState([]);
   const [editOpen, setEditOpen] = React.useState(false);
-  const [editItem, setEditItem] = React.useState({});
+  const [editItem, setEditItem] = React.useState<InventoryItemType>({} as InventoryItemType);
   const [query, setQuery] = React.useState('');
 
   const getInventory = async () => {
@@ -90,12 +91,12 @@ const AdminPage: React.FC = (props) => {
     copiedInventory[replaceIndex] = response.data;
     setInventory(copiedInventory);
     setEditOpen(false);
-    setEditItem({});
+    setEditItem({} as InventoryItemType);
   }
 
   const handleInventoryEditClose = () => {
     setEditOpen(false);
-    setEditItem({});
+    setEditItem({} as InventoryItemType);
   }
 
   const handleInventoryEditClick = (item) => {

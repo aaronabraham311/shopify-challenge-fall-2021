@@ -3,14 +3,23 @@ import { Flex, IconButton, Spacer } from "@chakra-ui/react"
 import { AddIcon } from "@chakra-ui/icons";
 
 import AdminImageModal from "./AdminImageModal";
+import { InventoryItemType } from "../utils/types"; 
 
-const AddInventory: React.FC = ({ 
+type AddInventoryProps = {
+  handleInventorySubmit: ({ file, name, description, price, quantity}) => void;
+  edit: boolean;
+  handleEditClose: () => void;
+  handleEditSubmit: ({ id, name, description, price, quantity }) => void;
+  editItem: InventoryItemType;
+}
+
+const AddInventory = ({ 
   handleInventorySubmit,
   edit,
   handleEditClose,
   handleEditSubmit,
   editItem, 
-}) => {
+}: AddInventoryProps) => {
   const [modalOpen, setModalOpen] = React.useState(false);
 
   const handleOpen = () => {

@@ -16,8 +16,20 @@ import {
 } from "@chakra-ui/react";
 import { useForm, Controller } from "react-hook-form";
 
+import { InventoryItemType } from "../utils/types"; 
 
-const AdminImageModal: React.FC = ({
+type AdminImageModalProps = {
+    isOpen: boolean;
+    onClose: () => void;
+    modalTitle: string;
+    handleInventorySubmit: ({ file, name, description, price, quantity}) => void;
+    edit: boolean;
+    handleInventoryEdit: ({ id, name, description, price, quantity }) => void;
+    handleEditClose: () => void;
+    editItem: InventoryItemType;
+}
+
+const AdminImageModal = ({
     isOpen,
     onClose,
     modalTitle,
@@ -26,7 +38,7 @@ const AdminImageModal: React.FC = ({
     handleInventoryEdit,
     handleEditClose,
     editItem
-}) => {
+}: AdminImageModalProps) => {
     const [file, setFile] = React.useState(null);
     const { handleSubmit, control, reset } = useForm();
 
