@@ -9,7 +9,7 @@ const RevenueGraph = () => {
     const [totalRevenue, setTotalRevenue] = React.useState(0);
 
     const getWeekData = async () => {
-        const response = await axios.get('/api/transaction/get');
+        const response = await axios.get('/api/transactions?recentThree=false&graphData=true');
         const { weekRevenue, totalRevenue} = response.data;
         const labels = weekRevenue.map(items => items.date);
         const data = weekRevenue.map(items => items.sum);

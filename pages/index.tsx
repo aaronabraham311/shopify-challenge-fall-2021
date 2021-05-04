@@ -20,7 +20,7 @@ const MainPage: React.FC = (props) => {
 
 
   const getInventory = useCallback(async () => {
-    const response = await axios.get('/api/inventory/getAll');
+    const response = await axios.get('/api/inventory');
     setInventory(response.data);
   }, []);
 
@@ -47,7 +47,7 @@ const MainPage: React.FC = (props) => {
     quantity,
     price
   }) => {
-    const response = await axios.post('/api/transaction/buy', {
+    const response = await axios.post('/api/transactions', {
       itemId,
       pictureAssetId,
       quantity,

@@ -6,7 +6,6 @@ const s3Upload = async (file) => {
         file: filename,
     });
     const { url, fields } = await response.data;
-    console.log(fields);
 
     const formData = new FormData();
 
@@ -18,7 +17,6 @@ const s3Upload = async (file) => {
         method: 'POST',
         body: formData 
     });
-    console.log(res);
     return filename;
 }
 

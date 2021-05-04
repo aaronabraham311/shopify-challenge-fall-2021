@@ -2,10 +2,9 @@ import { createMocks } from 'node-mocks-http';
 import { readFileSync } from 'fs';
 import prisma from '../prisma/index';
 
-import createInventory from "../pages/api/inventory/create";
 import presign from "../pages/api/picture/presign";
-import getAll from "../pages/api/inventory/getAll";
-import editInventory from "../pages/api/inventory/edit";
+import inventoryGetPost from "../pages/api/inventory";
+import inventoryPutDelete from "../pages/api/inventory/[id]";
 
 describe('Inventory testing', () => {
     it("Presign image for S3 upload", async () => {
@@ -37,7 +36,7 @@ describe('Inventory testing', () => {
             body
         });
 
-        await createInventory(req, res);
+        await inventoryGetPost(req, res);
         expect(res._getStatusCode()).toBe(200);
 
         const inventoryId = JSON.parse(res._getData()).id;
@@ -58,7 +57,7 @@ describe('Inventory testing', () => {
             method: 'GET'
         });
 
-        await getAll(req, res);
+        await inventoryGetPost(req, res);
         expect(res._getStatusCode()).toBe(200);
     });
     it("Edit item on RDS", async () => {
@@ -75,22 +74,24 @@ describe('Inventory testing', () => {
             body
         });
 
-        await createInventory(req, res);
+        await inventoryGetPost(req, res);
         expect(res._getStatusCode()).toBe(200);
 
         const inventoryId = JSON.parse(res._getData()).id;
         const pictureAssetId = JSON.parse(res._getData()).pictureAsset.id;
         const { req: editReq, res: editRes } = createMocks({
-            method: 'POST',
+            method: 'PUT',
+            query: {
+                id: inventoryId
+            },
             body: {
-                id: inventoryId,
                 name: 'test',
                 description: 'test',
                 quantity: 0,
                 price: 0,
             }
         });
-        await editInventory(editReq, editRes);
+        await inventoryPutDelete(editReq, editRes);
         expect(editRes._getStatusCode()).toBe(200);
 
         await prisma.inventory.delete({

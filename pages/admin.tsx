@@ -33,7 +33,7 @@ const AdminPage: React.FC = (props) => {
   const [query, setQuery] = React.useState('');
 
   const getInventory = async () => {
-    const response = await axios.get('/api/inventory/getAll');
+    const response = await axios.get('/api/inventory');
     setInventory(response.data);
   };
 
@@ -65,7 +65,7 @@ const AdminPage: React.FC = (props) => {
       quantity,
       price,
     }
-    const newItem = await axios.post('/api/inventory/create', body);
+    const newItem = await axios.post('/api/inventory', body);
     setInventory([...inventory, newItem.data]);
   }
 
@@ -76,8 +76,7 @@ const AdminPage: React.FC = (props) => {
     price,
     quantity
   }) => {
-    const response = await axios.put('/api/inventory/edit', {
-      id,
+    const response = await axios.put(`/api/inventory/${id}`, {
       name,
       description,
       price,
@@ -100,7 +99,6 @@ const AdminPage: React.FC = (props) => {
   }
 
   const handleInventoryEditClick = (item) => {
-    console.log(item);
     setEditOpen(true);
     setEditItem(item);
   }
@@ -110,8 +108,7 @@ const AdminPage: React.FC = (props) => {
     pictureId, 
     filename 
   }) => {
-    await axios.post('/api/inventory/delete', {
-      inventoryId,
+    await axios.post(`/api/inventory/${inventoryId}`, {
       pictureId,
       filename
     });

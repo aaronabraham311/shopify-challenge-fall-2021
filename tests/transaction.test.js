@@ -1,9 +1,7 @@
 import { createMocks } from 'node-mocks-http';
 import prisma from '../prisma/index';
 
-import buyInventory from "../pages/api/transaction/buy";
-import getTransactions from "../pages/api/transaction/get";
-import recentThree from "../pages/api/transaction/recentThree";
+import transactions from "../pages/api/transactions";
 
 describe('Transaction testing', () => {
     it("Buy item", async () => {
@@ -18,7 +16,7 @@ describe('Transaction testing', () => {
                 price: 0
             }
         });
-        await buyInventory(req, res);
+        await transactions(req, res);
 
         expect(res._getStatusCode()).toBe(200);
 
@@ -32,18 +30,21 @@ describe('Transaction testing', () => {
     });
     it("Get transaction data", async () => {
         const { req, res } = createMocks({
-            method: 'GET'
+            method: 'GET',
+            query: {
+                graphData: 'true'
+            }
         });
 
-        await getTransactions(req, res);
+        await transactions(req, res);
         expect(res._getStatusCode()).toBe(200);
     });
     it("Get three most recent transactions", async () => {
         const { req, res } = createMocks({
-            method: 'GET'
+            recentThree: 'true'
         });
 
-        await recentThree(req, res);
+        await transactions(req, res);
         expect(res._getStatusCode()).toBe(200);
     });
 });

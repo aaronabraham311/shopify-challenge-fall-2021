@@ -7,7 +7,7 @@ const RecentTransactionList = () => {
     const [recentTransactions, setRecentTransactions] = React.useState([]);
 
     const getRecentTransactions = async () => {
-        const response = await axios.get('/api/transaction/recentThree');
+        const response = await axios.get('/api/transactions?recentThree=true&graphData=false');
         setRecentTransactions(response.data);
     };
     
