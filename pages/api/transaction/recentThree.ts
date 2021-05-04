@@ -1,6 +1,6 @@
 import prisma from '../../../prisma/index'; // Prisma client
 
-export default async (req, res) => {
+export default async function recentThree (req, res) {
     try {
         // Get past 7 days
         const recentThree = await prisma.transaction.findMany({

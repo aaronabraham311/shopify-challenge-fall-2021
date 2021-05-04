@@ -1,6 +1,6 @@
 import prisma from '../../../prisma/index'; // Prisma client
 
-export default async (req, res) => {
+export default async function getAll(req, res) {
     try {
         // Get all inventories
         const inventory = await prisma.inventory.findMany({

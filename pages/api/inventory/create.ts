@@ -1,7 +1,7 @@
 import prisma from '../../../prisma/index'; // Prisma client
 import  { imaggaCategorization } from "../../../utils/imagga";
 
-export default async (req, res) => {
+export default async function createInventory(req, res) {
     const {
         filename,
         name,
@@ -44,6 +44,8 @@ export default async (req, res) => {
             })
         }
     } catch (e) {
+        console.log(e)
+        console.log('\n\n\n');
         return res.status(400).json({
             error: 'Error adding to inventory',
         });

@@ -10,6 +10,7 @@ import Grid from "../components/Grid";
 import AddInventory from "../components/AddInventory";
 import RevenueGraph from "../components/RevenueGraph";
 import RecentTransactionList from "../components/RecentTransactionList";
+import s3Upload from "../utils/s3Upload";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
@@ -49,27 +50,6 @@ const AdminPage: React.FC = (props) => {
     }
   }, [query])
 
-  const handleTransactionSubmit = async ({ 
-    itemId,
-    pictureAssetId,
-    quantity,
-    price
-  }) => {
-    const response = await axios.post('/api/transaction/buy', {
-      itemId,
-      pictureAssetId,
-      quantity,
-      price,
-    });
-
-    const replaceIndex = inventory.findIndex(
-      (item) => item.id === response.data.id
-    );
-    const copiedInventory = [...inventory];
-    copiedInventory[replaceIndex] = response.data;
-    setInventory(copiedInventory);
-  }
-
   const handleInventorySubmit = async ({
     file,
     name,
@@ -77,22 +57,7 @@ const AdminPage: React.FC = (props) => {
     price,
     quantity
   }) => {
-    const filename = encodeURIComponent(file.name);
-    const response = await axios.post('/api/picture/presign', {
-      file: filename,
-    });
-    const { url, fields } = await response.data;
-    const formData = new FormData();
-
-    Object.entries({...fields, file}).forEach(([key, value]) => {
-      formData.append(key, value);
-    });
-
-    await fetch(url, {
-      method: 'POST',
-      body: formData 
-    });
-
+    const filename = await s3Upload(file);
     const body = {
       filename: filename,
       name,
@@ -178,7 +143,6 @@ const AdminPage: React.FC = (props) => {
         inventory={
           filteredInventory.length > 0 || query !== '' ? filteredInventory : inventory
         } 
-        handleTransaction={handleTransactionSubmit}
         handleInventoryDelete={handleInventoryDelete}
         handleEditClick={handleInventoryEditClick}
         query={query}

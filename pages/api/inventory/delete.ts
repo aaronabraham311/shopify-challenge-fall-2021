@@ -8,7 +8,7 @@ AWS.config.update({
     region: process.env.BUCKET_REGION,
 });
 
-export default async (req, res) => {
+export default async function deleteInventory (req, res) {
     const { inventoryId, pictureId, filename } = req.body;
 
     try {
@@ -34,7 +34,7 @@ export default async (req, res) => {
             });
         }
 
-        // Deleting picture asset and inventory in single transaction
+        // Deleting picture asset and inventory 
         const deleteInventory = await prisma.inventory.delete({
             where: {
                 id: inventoryId,

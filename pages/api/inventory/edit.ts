@@ -1,6 +1,6 @@
 import prisma from '../../../prisma/index'; // Prisma client
 
-export default async (req, res) => {
+export default async function editInventory (req, res) {
     const { 
         id,
         name,

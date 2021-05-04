@@ -7,7 +7,7 @@ AWS.config.update({
     region: process.env.BUCKET_REGION,
 });
 
-export default async (req, res) => {
+export default async function presign(req, res) {
     // Get information fields
     const { file } = req.body;
 

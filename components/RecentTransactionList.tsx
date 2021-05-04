@@ -49,7 +49,7 @@ const RecentTransactionList = () => {
             </Flex>
             <Box>
                 {recentTransactions.map((transaction) => (
-                    <Box borderRadius="md" bg="teal" color="white" mt="5" p="3">
+                    <Box key={transaction.id} borderRadius="md" bg="teal" color="white" mt="5" p="3">
                         <Text><b>Date of transaction:</b> {convertDate(transaction.date)}</Text>
                         <Text><b>Transaction revenue:</b> ${transaction.revenue}</Text>
                         <Text><b>Quantity bought:</b> {transaction.quantity}</Text>

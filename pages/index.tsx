@@ -53,12 +53,12 @@ const MainPage: React.FC = (props) => {
       quantity,
       price,
     });
-
+    const { inventoryItem } = response.data;
     const replaceIndex = inventory.findIndex(
-      (item) => item.id === response.data.id
+      (item) => item.id === inventoryItem.id
     );
     const copiedInventory = [...inventory];
-    copiedInventory[replaceIndex] = response.data;
+    copiedInventory[replaceIndex] = inventoryItem;
     setInventory(copiedInventory);
   }
   

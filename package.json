@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "test": "jest --verbose=true"
   },
   "keywords": [],
   "author": "",
@@ -20,8 +21,11 @@
     "axios": "^0.21.1",
     "chart.js": "^3.2.0",
     "framer-motion": "^4.1.11",
+    "identity-obj-proxy": "^3.0.0",
     "next": "9.5.5",
     "next-auth": "^3.19.5",
+    "node-fetch": "^2.6.1",
+    "node-mocks-http": "^1.10.1",
     "react": "16.14.0",
     "react-chartjs-2": "^3.0.3",
     "react-dom": "16.14.0",
@@ -29,9 +33,15 @@
     "react-markdown": "5.0.2"
   },
   "devDependencies": {
+    "@testing-library/dom": "^7.30.4",
+    "@testing-library/jest-dom": "^5.12.0",
+    "@testing-library/react": "^11.2.6",
     "@types/next-auth": "3.1.14",
     "@types/node": "14.14.6",
     "@types/react": "16.9.56",
+    "babel-jest": "^26.6.3",
+    "jest": "^26.6.3",
+    "jest-dom": "^4.0.0",
     "prisma": "2.21.2",
     "typescript": "4.0.5"
   }

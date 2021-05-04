@@ -1,6 +1,6 @@
 import prisma from '../../../prisma/index'; // Prisma client
 
-export default async (req, res) => {
+export default async function getTransactions(req, res) {
     try {
         // Get past 7 days
         const today = new Date();

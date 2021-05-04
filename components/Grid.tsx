@@ -18,7 +18,8 @@ const Grid: React.FC = ({
       <Searchbar query={query} handleQueryChange={handleQueryChange} />
       <SimpleGrid minChildWidth="300px" spacing="40px" p="10">
           {inventory.length > 0 && (inventory.map((item) => {
-              return <ImageCard 
+              return <ImageCard
+                  key={item.id} 
                   imageFilename={item.pictureAsset.s3_link}
                   imageTag={item.tag}
                   itemTitle={item.name}
