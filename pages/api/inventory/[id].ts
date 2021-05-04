@@ -3,9 +3,9 @@ import AWS from 'aws-sdk';
 
 // AWS config
 AWS.config.update({
-    accessKeyId: process.env.AWS_ACCESS_KEY,
-    secretAccessKey: process.env.AWS_SECRET_KEY, 
-    region: process.env.BUCKET_REGION,
+    accessKeyId: process.env.AMETHYST_AWS_ACCESS_KEY,
+    secretAccessKey: process.env.AMETHYST_AWS_SECRET_KEY, 
+    region: process.env.AMETHYST_BUCKET_REGION,
 });
 
 export default async function inventoryPutDelete(req, res) {
@@ -46,7 +46,7 @@ export default async function inventoryPutDelete(req, res) {
 
                 const s3Deletion = await new Promise(async (resolve, reject) => {
                     await s3.deleteObject({
-                        Bucket: process.env.BUCKET_NAME,
+                        Bucket: process.env.AMETHYST_BUCKET_NAME,
                         Key: filename
                     }, function(err, data){
                         if (err) {

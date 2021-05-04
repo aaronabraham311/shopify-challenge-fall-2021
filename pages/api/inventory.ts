@@ -23,10 +23,10 @@ export default async function inventoryGetPost(req, res) {
                     price,
                 } = req.body;
 
-                const s3Link = process.env.BASE_S3_LINK + filename
+                const s3Link = process.env.AMETHYST_BASE_S3_LINK + filename
         
                 // Tagging image
-                const tag = await imaggaCategorization(s3Link, process.env.IMAGGA_KEY, process.env.IMAGGA_SECRET); 
+                const tag = await imaggaCategorization(s3Link, process.env.AMETHYST_IMAGGA_KEY, process.env.AMETHYST_IMAGGA_SECRET); 
 
                 // Create inventory and picture assets
                 const inventory = await prisma.inventory.create({

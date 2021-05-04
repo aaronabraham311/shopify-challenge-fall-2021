@@ -10,8 +10,8 @@ const options = {
                 password: { label: "Password", type:"password"}
             },
             authorize: async (credentials) => {
-                const username = process.env.NEXTAUTH_USERNAME
-                const password = process.env.NEXTAUTH_PASSWORD
+                const username = process.env.AMETHYST_NEXTAUTH_USERNAME
+                const password = process.env.AMETHYST_NEXTAUTH_PASSWORD
                 if (credentials.username === username && credentials.password === password) {
                     return Promise.resolve({id: 1, name: "admin"});
                 } else {
