@@ -12,6 +12,7 @@ import RevenueGraph from "../components/RevenueGraph";
 import RecentTransactionList from "../components/RecentTransactionList";
 import s3Upload from "../utils/s3Upload";
 import { InventoryItemType } from "../utils/types"; 
+import url from "../utils/url";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
@@ -125,7 +126,7 @@ const AdminPage: React.FC = (props) => {
 
   return (
     <>
-      <NavBarContainer admin handleLogout={() => signOut({ callbackUrl: 'http://localhost:3000/'})}/>
+      <NavBarContainer admin handleLogout={() => signOut({ callbackUrl: url })}/>
       <SimpleGrid columns={2} spacing="40" p="10">
         <RevenueGraph />
         <RecentTransactionList />

@@ -5,6 +5,7 @@ import NavBarContainer from "../components/NavBarContainer";
 import axios from "axios"
 
 import Grid from "../components/Grid";
+import url from "../utils/url";
 
 export const getStaticProps: GetStaticProps = async () => {
   return { props: {} }
@@ -62,7 +63,7 @@ const MainPage: React.FC = (props) => {
   return (
     <>
       <NavBarContainer handleLogin={() => signIn(undefined, {
-        callbackUrl: 'http://localhost:3000/admin'
+        callbackUrl: `${url}/admin`
       })}/>
       <Grid 
         inventory={

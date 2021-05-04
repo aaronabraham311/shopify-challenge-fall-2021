@@ -59,6 +59,7 @@ export default async function inventoryGetPost(req, res) {
                 res.status(405).end(`Method ${method} not allowed`);
         }
     } catch (e) {
+        console.log(e);
         return res.status(400).json({
             error: 'Error adding to inventory',
         });
