@@ -70,6 +70,7 @@ const AdminImageModal = ({
     }
 
     const handleClose = () => {
+        reset();
         if (edit) {
             handleEditClose();
         } else {
