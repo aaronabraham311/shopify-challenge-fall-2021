@@ -1,3 +1,4 @@
+// Sets URL for redirection (used for login & logout)
 let url: string = '';
 
 if (process.env.NODE_ENV === "production") {

@@ -10,7 +10,6 @@ declare global {
 let prisma: PrismaClient
 
 if (process.env.NODE_ENV === 'production') {
-  console.log('True');
   prisma = new PrismaClient()
 } else {
   if (!global.prisma) {

@@ -59,7 +59,6 @@ const AdminImageModal = ({
                 ...parsedData, id: editItem.id
             })
         } else {
-
             handleInventorySubmit({
                 ...parsedData, file
             });

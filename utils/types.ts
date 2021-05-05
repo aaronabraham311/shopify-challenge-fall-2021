@@ -1,3 +1,4 @@
+// Basic types for TypeScript
 export interface PictureAssetItemType {
     id: number;
     s3_key: string;

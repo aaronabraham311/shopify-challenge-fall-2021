@@ -7,12 +7,12 @@ export default async function transactions(req, res) {
         switch (method) {
             case 'GET':
                 if (graphData === 'true') {
-                    // Get past 7 days
+                    // Get past 7 days of revenue
                     const today = new Date();
                     const lastWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7);
                     const weekRevenue = await prisma.$queryRaw`SELECT DATE(dt), SUM(revenue) FROM transactions WHERE DATE(dt) > ${lastWeek} GROUP BY DATE(dt) ORDER BY 1`;
 
-                    // Get total 
+                    // Get total revenue
                     const totalRevenue = await prisma.transaction.aggregate({
                         sum: {
                             revenue: true
@@ -28,6 +28,7 @@ export default async function transactions(req, res) {
                 }
 
                 if (recentThree === 'true') {
+                    // Gets three most recent transaction data
                     const recentThree = await prisma.transaction.findMany({
                         take: 3,
                         orderBy: [
@@ -50,7 +51,6 @@ export default async function transactions(req, res) {
 
                 // Create transaction
                 const revenue = quantity * price;
-
                 const transaction = await prisma.transaction.create({
                     data: {
                         pictureAssetId,
@@ -61,7 +61,7 @@ export default async function transactions(req, res) {
                 });
 
                 if(transaction) {
-                    // Update inventory
+                    // Update inventory with decreased quantity
                     const inventoryItem = await prisma.inventory.update({
                         where: {
                             id: itemId,

@@ -1,6 +1,5 @@
 import React, { useEffect } from "react"
 import { GetServerSideProps } from "next"
-import { useRouter } from "next/router";
 import NavBarContainer from "../components/NavBarContainer";
 import axios from "axios"
 import { SimpleGrid } from "@chakra-ui/react";
@@ -17,6 +16,8 @@ import url from "../utils/url";
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
   const res = context.res;
+
+  // If there is no user session, we redirect to the user to the main page
   if(!session) {
     res.setHeader('location', '/');
     res.statusCode = 302;
@@ -26,8 +27,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return { props: {} }
 }
 
-const AdminPage: React.FC = (props) => {
-  const router = useRouter();
+const AdminPage = () => {
   const [inventory, setInventory] = React.useState([]);
   const [filteredInventory, setFilteredInventory] = React.useState([]);
   const [editOpen, setEditOpen] = React.useState(false);
@@ -40,10 +40,12 @@ const AdminPage: React.FC = (props) => {
   };
 
   useEffect(() => {
+    // Gets entire inventory upon rendering
     getInventory();
   }, []);
 
   useEffect(() => {
+    // Sets filtered items based on query entered in search bar
     if (query === '') {
       setFilteredInventory([]);
     } else {
@@ -59,7 +61,10 @@ const AdminPage: React.FC = (props) => {
     price,
     quantity
   }) => {
+    // Upload file to S3
     const filename = await s3Upload(file);
+    
+    // Update inventory
     const body = {
       filename: filename,
       name,
@@ -78,6 +83,7 @@ const AdminPage: React.FC = (props) => {
     price,
     quantity
   }) => {
+    // Update inventory with edited fields
     const response = await axios.put(`/api/inventory/${id}`, {
       name,
       description,
@@ -85,6 +91,7 @@ const AdminPage: React.FC = (props) => {
       quantity
     });
 
+    // Update React state with updated inventory
     const replaceIndex = inventory.findIndex(
       (item) => item.id === response.data.id
     );
@@ -110,10 +117,13 @@ const AdminPage: React.FC = (props) => {
     pictureId, 
     filename 
   }) => {
+    // Delete item from database
     await axios.post(`/api/inventory/${inventoryId}`, {
       pictureId,
       filename
     });
+    
+    // Delete item from React state
     const modifiedInventory = inventory.filter(
       (item) => item.id !== inventoryId
     );

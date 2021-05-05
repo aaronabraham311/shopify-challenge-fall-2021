@@ -11,7 +11,7 @@ export default async function presign(req, res) {
     // Get information fields
     const { file } = req.body;
 
-    // Upload picture to S3
+    // Gets presigned URL for AWS REST API upload
     const s3 = new AWS.S3();
 
     const post = await s3.createPresignedPost({

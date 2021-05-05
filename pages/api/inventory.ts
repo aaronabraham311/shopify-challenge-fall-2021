@@ -7,6 +7,7 @@ export default async function inventoryGetPost(req, res) {
     try {
         switch (method) {
             case 'GET':
+                // Gets all inventory items with nested picture assets
                 const allInventory = await prisma.inventory.findMany({
                     include: {
                         pictureAsset: true,
@@ -59,7 +60,6 @@ export default async function inventoryGetPost(req, res) {
                 res.status(405).end(`Method ${method} not allowed`);
         }
     } catch (e) {
-        console.log(e);
         return res.status(400).json({
             error: 'Error adding to inventory',
         });

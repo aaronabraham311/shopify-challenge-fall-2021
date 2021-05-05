@@ -17,16 +17,18 @@ const MainPage: React.FC = (props) => {
   const [query, setQuery] = React.useState('');
 
 
-  const getInventory = useCallback(async () => {
+  const getInventory = async () => {
     const response = await axios.get('/api/inventory');
     setInventory(response.data);
+  };
+
+  useEffect(() => {
+    // Gets all inventory upon render
+    getInventory();
   }, []);
 
   useEffect(() => {
-    getInventory();
-  }, [getInventory]);
-
-  useEffect(() => {
+    // Sets filtered items based on query entered in search bar
     if (query === '') {
       setFilteredInventory([]);
     } else {
@@ -45,6 +47,7 @@ const MainPage: React.FC = (props) => {
     quantity,
     price
   }) => {
+    // Adds transaction to database
     const response = await axios.post('/api/transactions', {
       itemId,
       pictureAssetId,
@@ -52,6 +55,8 @@ const MainPage: React.FC = (props) => {
       price,
     });
     const { inventoryItem } = response.data;
+
+    // Updates React state with updated inventory
     const replaceIndex = inventory.findIndex(
       (item) => item.id === inventoryItem.id
     );

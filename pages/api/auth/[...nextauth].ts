@@ -12,6 +12,8 @@ const options = {
             authorize: async (credentials) => {
                 const username = process.env.AMETHYST_NEXTAUTH_USERNAME
                 const password = process.env.AMETHYST_NEXTAUTH_PASSWORD
+
+                // Checks authorization based on environment variables
                 if (credentials.username === username && credentials.password === password) {
                     return Promise.resolve({id: 1, name: "admin"});
                 } else {

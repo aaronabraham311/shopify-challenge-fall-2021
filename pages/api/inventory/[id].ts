@@ -21,6 +21,7 @@ export default async function inventoryPutDelete(req, res) {
                     price
                 } = req.body;
 
+                // Updates inventory based on item id from route
                 const updateInventory = await prisma.inventory.update({
                     where: {
                         id: parseInt(id),
