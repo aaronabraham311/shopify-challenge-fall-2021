@@ -37,7 +37,7 @@ const RevenueGraph = () => {
     return (
         <Box>
             <Flex>
-                <Text fontSize="lg" as="b">Total revenue: ${totalRevenue}</Text>
+                <Text fontSize="lg" as="b">Total revenue: ${totalRevenue.toFixed(2)}</Text>
                 <Spacer />
                 <IconButton
                     aria-label="Fetch data"
