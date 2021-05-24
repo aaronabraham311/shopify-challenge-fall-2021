@@ -40,7 +40,21 @@ const AdminImageModal = ({
     editItem
 }: AdminImageModalProps) => {
     const [file, setFile] = React.useState(null);
-    const { handleSubmit, control, reset } = useForm();
+    const { handleSubmit, control, reset, setValue } = useForm();
+
+    React.useEffect(() => {
+        if(editItem && edit){
+            setValue('name', editItem.name);
+            setValue('description', editItem.description);
+            setValue('quantity', editItem.quantity);
+            setValue('price', editItem.price);
+        } else {
+            setValue('name', '');
+            setValue('description', '');
+            setValue('quantity', 0);
+            setValue('price', 0);
+        }
+    }, [editItem, edit])
 
     const handleFileUpload = (e) => {
         setFile(e.target.files[0]);
@@ -104,7 +118,6 @@ const AdminImageModal = ({
                             <Controller 
                                 name="name"
                                 control={control}
-                                defaultValue={edit ? editItem.name : ''}
                                 render={props => 
                                     <Input
                                         name="name" 
@@ -116,7 +129,6 @@ const AdminImageModal = ({
                             <Controller 
                                 name="description"
                                 control={control}
-                                defaultValue={edit ? editItem.description: ''}
                                 render={props => 
                                     <Input 
                                         name="description"
@@ -128,7 +140,6 @@ const AdminImageModal = ({
                             <Controller 
                                 name="price"
                                 control={control}
-                                defaultValue={edit ? editItem.price : 0}
                                 render={props => 
                                     <NumberInput {...props.field} min={0} precision={2}>
                                         <NumberInputField name="price" />
@@ -139,7 +150,6 @@ const AdminImageModal = ({
                             <Controller 
                                 name="quantity"
                                 control={control}
-                                defaultValue={edit ? editItem.quantity: 0}
                                 render={props => 
                                     <NumberInput {...props.field} min={0} precision={0}>
                                         <NumberInputField name="quantity" />
