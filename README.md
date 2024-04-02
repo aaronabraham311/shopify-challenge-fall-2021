@@ -1,7 +1,5 @@
 # Amethyst: Shopify Developer Challenge
 
-[Visit Amethyst](https://shopify-challenge-fall-2021.vercel.app/)
-
 Amethyst is a centralized platform to upload and sell images. Think of it like Shopify for images!
 
 ## Running locally
